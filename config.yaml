@@ -1,0 +1,24 @@
+# Cambiar a False cuando se quiera leer la web directamente
+url_from_file: True
+
+# True, transcribe datos de lvera a Series
+export_to_csv: False
+
+# Si solo se quiere leer datos sin generar gráficos, cambiar a False
+graphs: True
+
+# Rutas generales de archivos
+paths:
+  data: Data
+  exported: Data/Exported
+  umbrales: Data/Umbrales
+  series: Data/Series
+
+# Archivos con sus rutas
+files:
+  url: Data/url.html
+  list: Data/Ubicaciones/lista.xlsx
+  normals: Data/Umbrales/norm.xlsx
+  decadiarias: Data/Umbrales/decadiarias.xlsx
+  mapbox_token: Data/.mapbox_token.txt
+
