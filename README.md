@@ -24,7 +24,7 @@ Crear entorno virtual e instalar dependencias (solo la primera vez):
 
     Linux: make create-env
     Windows (anaconda prompt):
-        conda create --name dz3 python=3.8.16
+        conda create --name dz3 python=3.8.10
         pip install -r requirements
 
 Activar entorno virtual:
