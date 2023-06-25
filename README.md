@@ -8,22 +8,11 @@ Crear entorno virtual e instalar dependencias (solo la primera vez):
 
     make create-env
 
-Activar entorno en terminal de VSCode y ejecutar dashboard:
+Activar entorno en terminal de VSCode:
 
     conda activate dz3
-
-Ejecutar dashboard:
     
-- Opción 1:
-        
-        make run
-
-- Opción 2:
-
-        python app.py
-
-    
-# Comandos:
+# Ejecutar dashboard:
 
 En directorio raíz (Dashboard):
 
