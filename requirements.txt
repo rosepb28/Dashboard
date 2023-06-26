@@ -1,0 +1,10 @@
+pyyaml
+requests
+numpy
+pandas
+plotly
+dash
+string
+xlsxwriter
+dateutil
+calendar

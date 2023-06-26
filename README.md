@@ -1,4 +1,20 @@
-# Instalar anaconda o miniconda
+# Para windows:
+
+- Instalar Git
+	
+    https://git-scm.com/download/win
+
+En la terminal de VSCode:
+
+- Ejecutar el siguiente comando para ingresar correo asociado a Github:
+
+	git config --global user.email "user@email.com"
+
+- Ingresar a la carpeta Documentos y clonar repositorio Dashboard:
+	
+    git clone https://github.com/rosepb28/Dashboard.git
+
+# Instalar anaconda o miniconda, buscar versión 3.8 de Python
 
     https://docs.conda.io/en/latest/miniconda.html
 
@@ -6,11 +22,14 @@
 
 Crear entorno virtual e instalar dependencias (solo la primera vez):
 
-    make create-env
+    Linux: make create-env
+    Windows (anaconda prompt):
+        conda create --name dz3 python=3.8.16
+        pip install -r requirements
 
-Activar entorno en terminal de VSCode:
+Activar entorno virtual:
 
-    conda activate dz3
+    VSCode (linux) o Anaconda prompt (Windows): conda activate dz3
     
 # Ejecutar dashboard:
 
