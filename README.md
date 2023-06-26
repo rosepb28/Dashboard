@@ -35,7 +35,9 @@ Seleccionar terminal de Bash:
 
 Continuar con las siguientes instrucciones, ya sea en Linux o Windows.
 
-## Instalar anaconda o miniconda, buscar versión 3.8 de Python
+## Instalar anaconda o miniconda
+
+Buscar versión 3.8 de Python
 
     https://docs.conda.io/en/latest/miniconda.html
 
@@ -51,6 +53,8 @@ Crear entorno virtual e instalar dependencias (solo la primera vez):
 En VSCode:
 
     F1 > Python: Select Interpreter > Python 3.8.10 ('dz3')
+
+Ejecutar comando:
 
 ```bash
 conda activate dz3
