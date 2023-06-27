@@ -1,14 +1,12 @@
-**Importante:** Se debe tener cuenta de Github.
-
-El dashboard fue desarrollado en Windows, pero luego fue migrado y mejorado en Linux.
+El dashboard fue desarrollado en Windows, pero luego fue migrado refactorizado en Linux.
 En este S.O., los comandos como *make* y *git* son instalados fácilmente desde
 su terminal mediante el comando <sudo apt install ...>.
-Además dado que su terminal ya incluye Bash, la terminal de VSCode por defecto,
+Además, dado que su terminal ya incluye Bash, la terminal de VSCode por defecto,
 también trabaja con Bash.
 
 ------------------------------------------------------------------------------
 
-## Instalar Git en Windows:
+## Instrucciones para Windows:
 
 Instalar Git:
 	
@@ -22,7 +20,7 @@ Ejecutar el siguiente comando para ingresar correo asociado a Github:
 git config --global user.email "user@email.com"
 ```
 
-Ingresar a la carpeta Documentos y clonar repositorio Dashboard:
+Ingresar a la carpeta donde se quiera guardar el repositorio y clonar desde Github:
 	
 ```bash
 git clone https://github.com/rosepb28/Dashboard.git
@@ -46,13 +44,13 @@ Buscar versión 3.8 de Python
 Crear entorno virtual e instalar dependencias (solo la primera vez):
 
     Linux: make create-env
-    Windows (anaconda prompt):
-        conda create --name dz3 python=3.8.10
-        pip install -r requirements
+    
+    Windows (anaconda prompt): conda create --name dz3 python=3.8.10
+                               pip install -r requirements.txt
 
 En VSCode:
 
-    F1 > Python: Select Interpreter > Python 3.8.10 ('dz3')
+    Press F1 > Python: Select Interpreter > Python 3.8.10 ('dz3')
 
 Ejecutar comando:
 
@@ -62,7 +60,7 @@ conda activate dz3
     
 ## Opciones para ejecutar dashboard:
 
-En directorio raíz (Dashboard):
+Desde directorio raíz (Dashboard/):
 
 Generar SOLO dashboard: 
 
@@ -88,10 +86,10 @@ Generar dashboard, reporte diario y mensual:
 python app.py --daily --monthly
 ```
 
-**Opcional**: Si se tiene guardada la página en un archivo url.html y se quiere leer los datos desde ahí, cambiar valor *url_from_file* en config.yaml, a True.
+**Opcional**: Guardar la página en un archivo *url.html* y se quiere leer los datos desde ahí cambiando valor de *url_from_file* en [config.yaml](config.yaml), a *True*.
 Usar un archivo ya guardado en lugar de leer la web cada vez que se genere el dashboard, siempre tomará menos tiempo.
 
-# Comandos para actualizar archivos en la carpeta Data/Series:
+## Comandos para actualizar archivos en la carpeta Data/Series:
 
 **SIEMPRE** ejecutar los siguientes comandos para actualizar el repositorio:
 
