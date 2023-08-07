@@ -36,7 +36,7 @@ def lvera():
     Web scraping de la web lvera para extraer los últimos días con datos
     de las estaciones escogidas en file.
     Devuelve un diccionario (data) que contiene todas las estaciones con los datos
-    de los últimos 30 días, para las 3 variables (Tmax, Tmin y PP).
+    de los últimos 45 días, para las 3 variables (Tmax, Tmin y PP).
 
     Parámetros:
     download_to_csv: Booleano para descargar datos de lvera a archivos csv.
@@ -412,7 +412,7 @@ class Anomalies:
     df_mean: dataframe con promedio o acumulado mensual.
     this_month: mes anterior si es el día 1 del mes, mes actual para los demás días.
     file: archivo 'lista' con todas las estaciones.
-    file_w_normals: archivo 'norm' con los valores de las normales climátias.
+    file_w_normals: archivo 'norm' con los valores de las normales climáticas.
     """
 
     def __init__(self, var, df_mean, this_month, file, file_w_normals):
@@ -841,6 +841,8 @@ class Decadiarias:
         for i in dc.columns[2:]:
             if (dc[i] == 0).any():
                 self.columns_to_drop.append(i)
+
+        self.columns_to_drop = [s for s in self.columns_to_drop if s in sum_df.columns]
 
         dc.drop(columns=self.columns_to_drop, inplace=True)
         sum_df.drop(columns=self.columns_to_drop, inplace=True)

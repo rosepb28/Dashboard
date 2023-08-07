@@ -33,8 +33,6 @@ Seleccionar terminal de Bash:
     F1 > Terminal: Select Default Profile > Git Bash
 ------------------------------------------------------------------------------
 
-Continuar con las siguientes instrucciones, ya sea en Linux o Windows.
-
 ## Instalar anaconda o miniconda, buscar versión 3.8 de Python
 
     https://docs.conda.io/en/latest/miniconda.html
@@ -52,9 +50,11 @@ En VSCode:
 
     F1 > Python: Select Interpreter > Python 3.8.10 ('dz3')
 
+En caso la opción anterior no haga efecto en Windows, abrir el Anaconda Prompt:
 ```bash
 conda activate dz3
 ```
+Luego ingresar al directorio raíz del proyecto.
     
 ## Opciones para ejecutar dashboard:
 
