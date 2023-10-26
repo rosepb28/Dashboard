@@ -1,5 +1,5 @@
 # Cambiar a False cuando se quiera leer la web directamente
-url_from_file: True
+url_from_file: False
 
 # True, transcribe datos de lvera a Series
 export_to_csv: False
