@@ -254,9 +254,14 @@ class Dashboard:
 
         # Calculando suma de precipitación por provincia
         sum_by_prov = pp_sum.groupby("Provincia").sum().reset_index()
-        sum_by_prov["size"] = 20
+        # sum_by_prov["size"] = 20
 
-        opt = {"Provincia": True, "Lat": False, "Lon": False, "size": False}
+        opt = {
+            "Provincia": True,
+            "Lat": False,
+            "Lon": False,
+            "Sum": True,
+        }  # , "size": False}
 
         mapbx = px.scatter_mapbox(
             sum_by_prov,

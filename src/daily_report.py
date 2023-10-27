@@ -23,8 +23,6 @@ folder = config["paths"]["exported"] + f"/{ds.year}/{month}/"
 os.makedirs(folder) if not os.path.exists(folder) else "No"
 
 # Generar reporte
-print("Generando reporte diario...", end="", flush=True)
-
 wbk = xw.Workbook(folder + "data.xlsx")
 
 
@@ -54,5 +52,3 @@ for j, cc in enumerate(df.columns):
         wst.write(ps, vv, wbk.add_format({"border": 1}))
 
 wbk.close()
-
-print("Listo!")

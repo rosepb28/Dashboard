@@ -1,5 +1,6 @@
 import os
 import yaml
+import logging
 import urllib3
 import requests
 import numpy as np
@@ -31,6 +32,24 @@ def create_csv_if_not_exists(st_file):
         print(f"Archivo {st_file} creado exitosamente.")
 
 
+def filter_stations():
+    ss = pd.read_excel(config["files"]["list"])
+    ss = ss[ss["Dash"] == 1]
+    return ss
+
+
+def scrape_data():
+    if config["url_from_file"]:
+        logging.info("Leyendo datos desde archivo guardado.")
+        f = open(config["files"]["url"])
+        rpc = pd.read_html(f.read(), header=[0, 1])[0]
+    else:
+        logging.info("Leyendo datos desde la web lvera.")
+        f = requests.get(config["lvera_url"], verify=False).content
+        rpc = pd.read_html(f, header=[0, 1])[0]
+    return rpc
+
+
 def lvera():
     """
     Web scraping de la web lvera para extraer los últimos días con datos
@@ -45,21 +64,8 @@ def lvera():
                 guardada la página en el archivo url y se quiere ingresar a través
                 de este, cambiar a True.
     """
-    # Filtro de estaciones
-    ss = pd.read_excel(config["files"]["list"])
-    ss = ss[ss["Dash"] == 1]
-
-    # Web scraping con la web lvera
-
-    if config["url_from_file"]:
-        print("Leyendo datos desde archivo guardado.")
-        f = open(config["files"]["url"])
-        rpc = pd.read_html(f.read(), header=[0, 1])[0]
-    else:
-        print("Leyendo datos desde la web lvera.")
-        url = "https://www.senamhi.gob.pe/site/lvera/reporte_diario_rpc.php"
-        f = requests.get(url, verify=False).content
-        rpc = pd.read_html(f, header=[0, 1])[0]
+    ss = filter_stations()
+    rpc = scrape_data()
 
     # Arreglando encabezados de la tabla extraída
     rpc.columns = [c[0] if c[0] == c[1] else "_".join(c) for c in rpc.columns.values]
@@ -72,6 +78,7 @@ def lvera():
     rpc["Cod."] = rpc["Cod."].map(lambda x: "%d" % x)
 
     # Seleccionando solo los que hay en la web
+    ss["Cod"] = ss["Cod"].astype(str)
     idd = ss["Cod"].isin(rpc["Cod."])
     ss_rpc = ss[idd]
     v_rpc = ["MAX", "MIN", "PP"]
@@ -79,8 +86,8 @@ def lvera():
 
     # loop para todas las estaciones
     data_dict = {}
-    for i in range(len(ss_rpc)):
-        cod, prv, st = ss_rpc[["Cod", "Provincia", "Nombre"]].values[i]
+    for i in range(len(ss)):
+        cod, prv, st = ss[["Cod", "Provincia", "Nombre"]].values[i]
 
         # Leyendo csv's con datos
         st_file = os.path.join(config["paths"]["series"], f"{prv}/{cod}_{st}.csv")
@@ -111,24 +118,25 @@ def lvera():
         # Uniendo data de csv's con nuevo dataframe
         df = pd.concat([data, nn], ignore_index=True)
 
-        # Bucle para extraer data de web de cada columna y asignarlo al dataframe
-        for a, b in zip(v_rpc, v_df):
-            vc = [x for x in rpc.columns if a in x]
-            ld = date.today() - timedelta(days=1)
-            if a == "MIN":
-                ld = date.today()
-            ff = pd.date_range(end=ld, periods=len(vc))
-            df.loc[df["Fecha"].isin(ff), b] = (
-                rpc.loc[rpc["Cod."] == cod, vc].values[0].tolist()
-            )
+        if st in list(ss_rpc.Nombre):
+            # Bucle para extraer data de web de cada columna y asignarlo al dataframe
+            for a, b in zip(v_rpc, v_df):
+                vc = [x for x in rpc.columns if a in x]
+                ld = date.today() - timedelta(days=1)
+                if a == "MIN":
+                    ld = date.today()
+                ff = pd.date_range(end=ld, periods=len(vc))
+                df.loc[df["Fecha"].isin(ff), b] = (
+                    rpc.loc[rpc["Cod."] == cod, vc].values[0].tolist()
+                )
 
         data_dict[st] = df.tail(45)
 
         # Actualizando bases de datos con información del lvera
         if config["export_to_csv"]:
-            print("Descargando datos de web lvera a archivos locales..")
+            # print("Descargando datos de web lvera a archivos locales..")
             df.to_csv(st_file, index=False)
-            print("Archivos actualizados.")
+            # print("Archivos actualizados.")
 
     return data_dict
 
@@ -230,9 +238,8 @@ class LastData:
 
     def map_temps(self, var, mapbox_token):
         var = var.upper()
-        plu_st = ["LIVES", "CHUGUR"]
         df = self.last_data_df[["Lat", "Lon", var]]
-        df = df[~df.index.isin(plu_st)]
+        df = df[~df.index.isin(config["plu_st"])]
         df["size"] = 10
 
         if var == "TMIN":
@@ -325,6 +332,8 @@ def series(var, df, this_month, day):
     """
     var = var.lower()
     if var == "tmax" or var == "tmin":
+        plu_st_bool = ~df.columns.isin(config["plu_st"])
+        df = df[df.columns[plu_st_bool]]
         ss = []
         for i in range(len(df.columns)):
             ss.append(
@@ -421,7 +430,6 @@ class Anomalies:
         self.this_month = this_month
         self.file = file
         self.file_w_normals = file_w_normals
-        # self.calculate_anomalies()
 
     def calculate_anomalies(self):
         normal_file = pd.read_excel(self.file_w_normals, sheet_name=self.var)

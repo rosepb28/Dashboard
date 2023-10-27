@@ -145,12 +145,6 @@ class ExcelWriter:
         return self.wst
 
 
-# Lista de estaciones pluviométricas
-plu_st = ["LIVES", "CHUGUR"]
-
-# Generar reporte
-print("Generando reporte mensual...", end="", flush=True)
-
 # Creando hoja de excel
 wbk = xw.Workbook(os.path.join(folder, f"{this_month}_{month}_DATOS.xlsx"))
 
@@ -215,7 +209,7 @@ df = pd.DataFrame(index=this_month_day_list, columns=df_tmax.columns)
 for i in range(len(df_tmax)):
     df.iloc[i] = df_tmax.values[i]
 
-df = df.T[~df.T.index.isin(plu_st)]
+df = df.T[~df.T.index.isin(config["plu_st"])]
 df = df.rename_axis("Estaciones").reset_index()
 
 ExcelWriter(wbk, wst_tmax).no_color_cell(df, extend=True)
@@ -231,7 +225,7 @@ df = pd.DataFrame(index=ds.this_month_days_list, columns=df_tmin.columns)
 for i in range(len(df_tmin)):
     df.iloc[i] = df_tmin.values[i]
 
-df = df.T[~df.T.index.isin(plu_st)]
+df = df.T[~df.T.index.isin(config["plu_st"])]
 df = df.rename_axis("Estaciones").reset_index()
 
 ExcelWriter(wbk, wst_tmin).no_color_cell(df, extend=True)
@@ -267,5 +261,3 @@ wst_cpp = wbk.add_worksheet("cPP")
 ExcelWriter(wbk, wst_cpp).colored_cell("pp", ds, this_month, this_month_day_list)
 
 wbk.close()
-
-print("Listo!")

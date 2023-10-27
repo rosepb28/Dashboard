@@ -85,6 +85,11 @@ Generar dashboard, reporte diario y mensual:
 ```bash
 python app.py --daily --monthly
 ```
+Generar reporte diario y mensual, o escoger el que se requiera: 
+
+```bash
+python reports.py --daily --monthly
+```
 
 **Opcional**: Guardar la página en un archivo *url.html* y se quiere leer los datos desde ahí cambiando valor de *url_from_file* en [config.yaml](config.yaml), a *True*.
 Usar un archivo ya guardado en lugar de leer la web cada vez que se genere el dashboard, siempre tomará menos tiempo.
