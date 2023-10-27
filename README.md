@@ -68,19 +68,7 @@ Generar SOLO dashboard:
 python app.py
 ```
 
-Generar dashboard y reporte diario: 
-
-```bash
-python app.py --daily
-```
-
-Generar dashboard y reporte mensual: 
-
-```bash
-python app.py --monthly
-```
-
-Generar dashboard, reporte diario y mensual: 
+Generar dashboard, reporte diario y mensual, o escoger el que se requiera: 
 
 ```bash
 python app.py --daily --monthly
