@@ -18,7 +18,7 @@ args = parser.parse_args()
 
 # Check if the daily report should be generated
 if args.daily:
-    print("Generating daily report")
+    print("Generando resumen diario")
     subprocess.run(["python", "src/daily_report.py"])
 
 # Check if the monthly report should be generated
@@ -26,7 +26,7 @@ if args.monthly:
     if datetime.datetime.now().day == 1:
         print("No hay suficientes datos para generar el reporte mensual.")
     else:
-        print("Generating monthly report")
+        print("Generando resumen mensual")
         subprocess.run(["python", "src/monthly_report.py"])
 
 external_stylesheets = [dbc.themes.JOURNAL]

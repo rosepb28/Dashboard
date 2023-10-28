@@ -1,6 +1,6 @@
-__pycache__/
+__pycache__
 __pycache__/dashboard.cpython-38.pyc
 src/__pycache__/calculations.cpython-38.pyc
-src/__pycache__/
-.vscode/
-Data/Exported/
+src/__pycache__
+.vscode
+Data/Exported

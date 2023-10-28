@@ -10,9 +10,11 @@ args = parser.parse_args()
 
 # Check if the daily report should be generated
 if args.daily:
+    print("Generando resumen diario")
     subprocess.run(["python", "src/daily_report.py"])
 
 
 # Check if the monthly report should be generated
 if args.monthly and datetime.datetime.now().day != 1:
+    print("Generando resumen mensual")
     subprocess.run(["python", "src/monthly_report.py"])
