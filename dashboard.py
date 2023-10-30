@@ -251,22 +251,22 @@ class Dashboard:
         # Añadiendo provincias y coordenadas
         pp_sum = Utils(self.pp_sum, self.file).add_lat_lon_prov()
         pp_sum = pp_sum.rename_axis("Estaciones").reset_index()
-
-        # Calculando suma de precipitación por provincia
-        sum_by_prov = pp_sum.groupby("Provincia").sum().reset_index()
-        # sum_by_prov["size"] = 20
+        pp_sum["size"] = 20
+        
 
         opt = {
+            "Estaciones": True,
             "Provincia": True,
             "Lat": False,
             "Lon": False,
             "Sum": True,
-        }  # , "size": False}
+            "size": False}
 
         mapbx = px.scatter_mapbox(
-            sum_by_prov,
+            pp_sum,
             lat="Lat",
             lon="Lon",
+            hover_name="Estaciones",
             color="Provincia",
             size="Sum",
             size_max=30,
