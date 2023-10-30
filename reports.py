@@ -1,3 +1,4 @@
+import logging
 import argparse
 import datetime
 import subprocess
@@ -18,3 +19,5 @@ if args.daily:
 if args.monthly and datetime.datetime.now().day != 1:
     print("Generando resumen mensual")
     subprocess.run(["python", "src/monthly_report.py"])
+
+logging.info("Listo!")

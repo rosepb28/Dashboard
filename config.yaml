@@ -23,7 +23,7 @@ paths:
 # Archivos con sus rutas
 files:
   url: Data/url.html
-  list: Data/Ubicaciones/lista.xlsx
+  list: Data/Ubicaciones/filtro.xlsx
   normals: Data/Umbrales/norm.xlsx
   decadiarias: Data/Umbrales/decadiarias.xlsx
   mapbox_token: Data/.mapbox_token.txt
