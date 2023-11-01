@@ -5,3 +5,4 @@ Data/*
 !Data/.mapbox_token.txt
 !Data/Ubicaciones/filtro.xlsx
 drawio/
+config.yaml
