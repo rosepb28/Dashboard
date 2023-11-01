@@ -1,0 +1,29 @@
+# Cambiar a False cuando se quiera leer la web directamente
+url_from_file: False
+
+# URL de lvera
+lvera_url: https://www.senamhi.gob.pe/site/lvera/reporte_diario_rpc.php
+
+# True, transcribe datos de lvera a Series
+export_to_csv: False
+
+# Si solo se quiere leer datos sin generar gráficos, cambiar a False
+graphs: True
+
+# Estaciones pluviométricas. Las estaciones en esta lista se omitirán en las tablas o gráficos de temperaturas
+plu_st: ["LIVES"]
+
+# Rutas generales de archivos
+paths:
+  data: Data
+  exported: Data/Exported
+  umbrales: Data/Umbrales
+  series: Data/Series
+
+# Archivos con sus rutas
+files:
+  url: Data/url.html
+  list: Data/Ubicaciones/filtro.xlsx
+  normals: Data/Umbrales/norm.xlsx
+  decadiarias: Data/Umbrales/decadiarias.xlsx
+  mapbox_token: Data/.mapbox_token.txt
