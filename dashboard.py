@@ -1,23 +1,26 @@
-import yaml
-import pandas as pd
-from tqdm import tqdm
-from time import sleep
-from src.calculations import *
 from calendar import monthrange
 from datetime import datetime, timedelta
+from time import sleep
+
+import pandas as pd
+import yaml
 from dateutil.relativedelta import relativedelta
+from tqdm import tqdm
+
+from src.calculations import *
 
 with open("config.yaml", "r") as f:
     config = yaml.safe_load(f)
 
 
 class Dashboard:
-    def __init__(self, graphs=config["graphs"]):
+    def __init__(self, graphs=config["graphs"], from_file=False):
         """
         Recibe como parámetro el booleano graphs. Por defecto es True.
         Para pruebas, asignar False al llamar a la clase, cuando se quiera
         obtener SOLO los datos.
         """
+        self.from_file = from_file
         self.data_path = config["paths"]["data"]
         self.umb_path = config["paths"]["umbrales"]
         self.get_day_month()
@@ -58,7 +61,7 @@ class Dashboard:
         """
         Este método importa la función lvera para la recolección de datos de la web.
         """
-        self.data = lvera()
+        self.data = lvera(self.from_file)
 
         for i in self.data.keys():
             self.data[i]["Tmax"] = self.data[i]["Tmax"].astype(float)
@@ -252,7 +255,6 @@ class Dashboard:
         pp_sum = Utils(self.pp_sum, self.file).add_lat_lon_prov()
         pp_sum = pp_sum.rename_axis("Estaciones").reset_index()
         pp_sum["size"] = 20
-        
 
         opt = {
             "Estaciones": True,
@@ -260,7 +262,8 @@ class Dashboard:
             "Lat": False,
             "Lon": False,
             "Sum": True,
-            "size": False}
+            "size": False,
+        }
 
         mapbx = px.scatter_mapbox(
             pp_sum,

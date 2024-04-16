@@ -1,18 +1,27 @@
 import os
-import yaml
-import logging
-import urllib3
-import requests
+from datetime import date, datetime, timedelta
+from urllib.parse import urljoin
+
 import numpy as np
 import pandas as pd
 import plotly.express as px
-from dash import dash_table
 import plotly.graph_objects as go
-from datetime import date, timedelta
-
+import urllib3
+import yaml
+from dash import dash_table
+from dotenv import load_dotenv
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.firefox.options import Options
 
 pd.set_option("mode.chained_assignment", None)
 urllib3.disable_warnings()
+
+# Cargando credenciales
+load_dotenv()
+
+username = os.getenv("USERNAME")
+password = os.getenv("PASSWORD")
 
 # Abrir el archivo YAML
 with open("config.yaml", "r") as f:
@@ -38,19 +47,88 @@ def filter_stations():
     return ss
 
 
-def scrape_data():
-    if config["url_from_file"]:
-        logging.info("Leyendo datos desde archivo guardado.")
+def handle_url(page_source):
+    # Guardar el código fuente en un archivo HTML
+    file_path = "Data/url.html"
+    with open(file_path, "w") as f:
+        f.write(page_source)
+
+    # Verificar que el archivo se creó correctamente
+    if os.path.isfile(file_path):
+        print("El archivo se creó correctamente.")
+
+        # Obtener la fecha de la última modificación del archivo
+        modification_time = os.path.getmtime(file_path)
+        modification_date = datetime.fromtimestamp(modification_time).date()
+
+        # Verificar si el archivo es del día anterior
+        if modification_date < datetime.now().date():
+            print("Advertencia, el archivo es del día anterior.")
+    else:
+        print("No se pudo crear el archivo.")
+
+
+def scrape_data(from_file=False):
+    if from_file:
+        print("Leyendo datos desde archivo guardado.")
         f = open(config["files"]["url"])
         rpc = pd.read_html(f.read(), header=[0, 1])[0]
     else:
-        logging.info("Leyendo datos desde la web lvera.")
-        f = requests.get(config["lvera_url"], verify=False).content
-        rpc = pd.read_html(f, header=[0, 1])[0]
+        print("Leyendo datos desde la web lvera.")
+
+        url = config["lvera_url"]
+
+        # Configurar las opciones para Firefox
+        options = Options()
+        options.headless = True
+
+        # Iniciar el navegador en modo headless
+        driver = webdriver.Firefox(options=options)
+
+        # Navegar a la página de inicio de sesión
+        driver.get(url)
+
+        # Encontrar los campos de usuario y contraseña e ingresar los datos
+        driver.find_element(By.NAME, "usuario").send_keys(username)
+        driver.find_element(By.NAME, "password").send_keys(password)
+
+        # Encontrar el botón de inicio de sesión y hacer clic en él
+        driver.find_element(By.ID, "entrar").click()
+        print("Iniciando sesión")
+
+        # Obtener el código fuente de la página
+        page_source = driver.page_source
+
+        # Construir la URL completa
+        new_url = urljoin(url, "../../lvera/reporte_diario_rpc.php")
+
+        # Navegar a la nueva URL
+        try:
+            driver.get(new_url)
+            print("Accediendo a la página de lvera.")
+        except:
+            print("No se pudo acceder a la página de lvera.")
+            driver.quit()
+
+        # Esperar a que la página se cargue completamente
+        driver.implicitly_wait(10)
+
+        # Obtener el código fuente de la nueva página
+        page_source = driver.page_source
+
+        # Guardar el código fuente en un archivo HTML
+        handle_url(page_source)
+
+        # Leyendo tabla
+        rpc = pd.read_html(page_source, header=[0, 1])[0]
+
+        # Cerrar el navegador
+        print("Cerrando el navegador.")
+        driver.quit()
     return rpc
 
 
-def lvera():
+def lvera(from_file=False):
     """
     Web scraping de la web lvera para extraer los últimos días con datos
     de las estaciones escogidas en file.
@@ -65,13 +143,13 @@ def lvera():
                 de este, cambiar a True.
     """
     ss = filter_stations()
-    rpc = scrape_data()
+    rpc = scrape_data(from_file)
 
     # Arreglando encabezados de la tabla extraída
     rpc.columns = [c[0] if c[0] == c[1] else "_".join(c) for c in rpc.columns.values]
-    rpc.columns.values[
-        5
-    ] = "Estacion"  # Modificar directamente los valores de la columna
+    rpc.columns.values[5] = (
+        "Estacion"  # Modificar directamente los valores de la columna
+    )
 
     # Leyendo info de web y creando header
     rpc["Cod_Ant."] = rpc["Cod_Ant."].map(lambda x: "%06d" % x)

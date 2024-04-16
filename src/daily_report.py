@@ -1,9 +1,10 @@
 import os
-import sys
-import yaml
 import string
-import xlsxwriter as xw
+import sys
 from datetime import datetime
+
+import xlsxwriter as xw
+import yaml
 
 root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(root_dir)
@@ -14,7 +15,7 @@ from dashboard import Dashboard
 with open("config.yaml", "r") as f:
     config = yaml.safe_load(f)
 
-ds = Dashboard(graphs=False)
+ds = Dashboard(graphs=False, from_file=True)
 
 month = datetime.now().strftime("%b")
 today_date = datetime.now().strftime("%d-%m-%y")

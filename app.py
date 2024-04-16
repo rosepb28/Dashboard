@@ -1,15 +1,16 @@
 import argparse
 import datetime
 import warnings
-import logging
 
 warnings.simplefilter("ignore", UserWarning)
+import subprocess
+
 import dash
-import layout as layout
+import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
-import dash_bootstrap_components as dbc
-import subprocess
+
+import layout as layout
 
 # Parse command line arguments
 parser = argparse.ArgumentParser()
@@ -19,15 +20,15 @@ args = parser.parse_args()
 
 # Check if the daily report should be generated
 if args.daily:
-    logging.info("Generando resumen diario")
+    print("Generando resumen diario")
     subprocess.run(["python", "src/daily_report.py"])
 
 # Check if the monthly report should be generated
 if args.monthly:
     if datetime.datetime.now().day == 1:
-        logging.info("No hay suficientes datos para generar el reporte mensual.")
+        print("No hay suficientes datos para generar el reporte mensual.")
     else:
-        logging.info("Generando resumen mensual")
+        print("Generando resumen mensual")
         subprocess.run(["python", "src/monthly_report.py"])
 
 external_stylesheets = [dbc.themes.JOURNAL]

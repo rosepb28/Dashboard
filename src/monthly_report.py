@@ -1,13 +1,15 @@
 import os
-import sys
-import yaml
 import string
+import sys
+from datetime import datetime
+
 import numpy as np
 import pandas as pd
 import xlsxwriter as xw
-from datetime import datetime
+import yaml
 from dateutil.relativedelta import relativedelta
-from calculations import Clasification, Utils, Anomalies, Decadiarias
+
+from calculations import Anomalies, Clasification, Decadiarias, Utils
 
 root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(root_dir)
@@ -18,7 +20,7 @@ from dashboard import Dashboard
 with open("config.yaml", "r") as f:
     config = yaml.safe_load(f)
 
-ds = Dashboard(graphs=False)
+ds = Dashboard(graphs=False, from_file=True)
 month = datetime.now().strftime("%b")
 folder = config["paths"]["exported"] + f"/{ds.year}/{month}/"
 os.makedirs(folder) if not os.path.exists(folder) else "No"

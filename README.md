@@ -45,6 +45,8 @@ Crear entorno virtual e instalar dependencias (solo la primera vez):
     
     Windows (anaconda prompt): conda create --name dz3 python=3.8.10
                                pip install -r requirements.txt
+    MacOS: conda create --name dz3 python=3.8
+           pip install --use-pep517 -r requirements.txt
 
 En VSCode:
 
@@ -56,45 +58,29 @@ En caso la opción anterior no haga efecto en Windows, abrir el Anaconda Prompt:
 ```bash
 conda activate dz3
 ```
-Luego ingresar al directorio raíz del proyecto.
+Luego ingresar al directorio raíz del proyecto (Dashboard/) y continuar con los siguientes pasos.
+
+## Agregar credenciales
+Crear archivo .env y agregar las credenciales:
+
+```c
+USERNAME="{usuario}"
+PASSWORD="{contraseña}"
+```
     
 ## Opciones para ejecutar dashboard:
 
-Desde directorio raíz (Dashboard/):
+Desde directorio raíz:
 
-Generar SOLO dashboard: 
+Generar SOLO dashboard: El siguiente comando guardará automáticamente
+el código fuente en un archivo .html
 
 ```bash
 python app.py
 ```
 
-Generar dashboard, reporte diario y mensual, o escoger el que se requiera: 
+Generar dashboard, reporte diario y mensual (desde archivo guardado), o escoger el que se requiera: 
 
 ```bash
 python app.py --daily --monthly
-```
-Generar reporte diario y mensual, o escoger el que se requiera: 
-
-```bash
-python reports.py --daily --monthly
-```
-
-**Opcional**: Guardar la página en un archivo *url.html* y se quiere leer los datos desde ahí cambiando valor de *url_from_file* en [config.yaml](config.yaml), a *True*.
-Usar un archivo ya guardado en lugar de leer la web cada vez que se genere el dashboard, siempre tomará menos tiempo.
-
-## Comandos para actualizar archivos en la carpeta Data/Series:
-
-**SIEMPRE** ejecutar los siguientes comandos para actualizar el repositorio:
-
-```bash
-git fetch
-git pull
-```
-
-Para cargar los datos actualizados durante la semana (generalmente los viernes):
-
-```bash
-git add .
-git commit -m "Escribir comentario aquí."
-git push
 ```
